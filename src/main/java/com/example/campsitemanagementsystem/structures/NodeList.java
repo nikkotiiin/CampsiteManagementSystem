@@ -35,5 +35,14 @@ public class NodeList<E> {
         return null;
 
     }
+    public boolean isEmpty() {
+        return head == null;
+
+    }
+
+    public void clear() {
+        head = null;
+
+    }
 
 }

@@ -29,5 +29,26 @@ public class NodeListTest {
         assertEquals("Campsite", list.getElement(1));
 
     }
+    @Test
+    public void testIsEmpty() {
+        NodeList<String> list = new NodeList<String>();
+        assertEquals(true, list.isEmpty());
+
+        list.add("Hello");
+
+        assertEquals(false, list.isEmpty());
+
+    }
+    @Test
+    public void testClear() {
+        NodeList<String> list = new NodeList<String>();
+        list.add("Hello");
+        list.add("World");
+
+        list.clear();
+
+        assertEquals(0, list.size());
+
+    }
 
 }

@@ -8,7 +8,32 @@ public class NodeList<E> {
         Node<E> newNode = new Node<E>(element);
         newNode.next = head;
         head = newNode;
+    }
+    public boolean remove(E element) {
+        if (head == null) {
+            return false;
+        }
+        if(head.getContents().equals(element)){
+            head = head.next;
+            return true;
+        }
+        Node<E> previous = head;
+        Node<E> current = head.next;
+
+        while(current!=null){
+            if(current.getContents().equals(element)){
+                previous.next=current.next;
+
+                return true;
             }
+            previous=previous.next;
+            current=current.next;
+
+        }
+
+
+        return false;
+    }
 
 
     public int size(){

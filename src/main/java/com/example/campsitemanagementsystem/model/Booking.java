@@ -12,6 +12,7 @@ public class Booking {
     private LocalDate endDate;
     private String preferredType;
     private int numberOfGuests;
+    private String assignedPlotId;
 
     public double getMinSize() {
         return minSize;
@@ -98,5 +99,17 @@ public class Booking {
             return false;
         }
         return true;
+    }
+    public boolean hasDateConflict(Booking otherBooking) {
+        if(startDate.isBefore(otherBooking.getEndDate()) && otherBooking.getStartDate().isBefore(getEndDate())){
+            return true;
+        }
+        return false;
+    }
+    public void assignPlot(String plotId) {
+        this.assignedPlotId=plotId;
+    }
+    public String getAssignedPlotId(){
+        return assignedPlotId;
     }
 }

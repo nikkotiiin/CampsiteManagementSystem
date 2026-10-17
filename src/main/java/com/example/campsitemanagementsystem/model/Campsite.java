@@ -63,4 +63,30 @@ public class Campsite {
     public String getContactInfo() {
         return contactInfo;
     }
+
+    public NodeList<Booking> getGuestBookings(String guestId) {
+        NodeList<Booking> guestBookings = new NodeList<Booking>();
+        for(int i=0; i < getCampingAreaCount(); i++){
+            CampingArea currentArea = getCampingArea(i);
+            NodeList<Booking> areaBookings = currentArea.getGuestBookings(guestId);
+            for (int j = 0; j < areaBookings.size(); j++) {
+                Booking currentBooking = areaBookings.getElement(j);
+                guestBookings.add(currentBooking);
+            }
+
+        }
+        return guestBookings;
+    }
+    public NodeList<Booking> getPendingBookings() {
+        NodeList<Booking> pendingBookings = new NodeList<Booking>();
+        for(int i=0; i<getCampingAreaCount(); i++){
+            CampingArea currentArea = getCampingArea(i);
+            for(int j=0; j<currentArea.getPendingBookingCount(); j++){
+                Booking currentBooking = currentArea.getPendingBooking(j);
+                pendingBookings.add(currentBooking);
+            }
+        }
+        return pendingBookings;
+
+    }
 }

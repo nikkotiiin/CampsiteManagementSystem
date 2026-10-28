@@ -52,6 +52,9 @@ public class Booking {
     public String getCampingAreaId() {
         return campingAreaId;
     }
+    public void setCampingAreaId(String campingAreaId) {
+        this.campingAreaId = campingAreaId;
+    }
 
     public LocalDate getStartDate() {
         return startDate;

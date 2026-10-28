@@ -134,7 +134,9 @@ public class CampingArea {
                 i++;
             }
         }
-
+    }
+    public boolean removePendingBooking(Booking booking) {
+        return pendingBookings.remove(booking);
     }
     public NodeList<Booking> getGuestBookings(String guestId) {
         NodeList<Booking> guestBookings = new NodeList<Booking>();

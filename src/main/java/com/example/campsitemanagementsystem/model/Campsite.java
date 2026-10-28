@@ -8,6 +8,7 @@ public class Campsite {
     private int stars;
     private String contactInfo;
     private NodeList<CampingArea> campingAreas;
+    private String facilities;
 
     public Campsite(String name, String address, int stars, String contactInfo) {
         this.name = name;
@@ -15,6 +16,13 @@ public class Campsite {
         this.stars = stars;
         this.contactInfo = contactInfo;
         this.campingAreas = new NodeList<CampingArea>();
+    }
+    public String getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(String facilities) {
+        this.facilities = facilities;
     }
     public void addCampingArea(CampingArea area) {
         for (int i=0; i<getCampingAreaCount(); i++) {
@@ -88,5 +96,64 @@ public class Campsite {
         }
         return pendingBookings;
 
+    }
+    public CampingArea findAlternativeArea(Booking booking, String oldAreaId) {
+        for (int i=0; i<campingAreas.size(); i++) {
+            CampingArea area = campingAreas.getElement(i);
+
+            if (!area.getId().equals(oldAreaId)) {
+                Plot availablePlot = area.findAvailablePlot(booking);
+                if (availablePlot != null) {
+                    return area;
+                }
+            }
+        }
+
+        return null;
+    }
+    public boolean movePendingBooking(CampingArea oldArea, Booking booking) {
+        CampingArea newArea = findAlternativeArea(booking, oldArea.getId());
+
+        if (newArea == null) {
+            return false;
+        }
+
+        Plot newPlot = newArea.findAvailablePlot(booking);
+
+        boolean removed = oldArea.removePendingBooking(booking);
+
+        if (removed == false) {
+            return false;
+        }
+
+        booking.setCampingAreaId(newArea.getId());
+        booking.assignPlot(newPlot.getId());
+
+        newArea.addBooking(booking);
+
+        return true;
+    }
+    public boolean removePlot(String areaId, String plotId) {
+        for (int i = 0; i < campingAreas.size(); i++) {
+            CampingArea area = campingAreas.getElement(i);
+            if (area.getId().equals(areaId)) {
+                boolean removed = area.removePlot(plotId);
+                if (removed == false) {
+                    return false;
+                }
+                int j = 0;
+                while (j < area.getPendingBookingCount()) {
+                    Booking booking = area.getPendingBooking(j);
+                    boolean moved = movePendingBooking(area, booking);
+                    if (moved == false) {
+                        j++;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

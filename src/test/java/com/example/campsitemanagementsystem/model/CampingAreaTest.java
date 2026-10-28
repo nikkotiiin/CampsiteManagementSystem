@@ -129,4 +129,60 @@ public class CampingAreaTest {
 
         assertNull(area.findMatchingPlot(booking));
     }
+    @Test
+    void testRemovePlot() {
+        CampingArea area = new CampingArea("A1", "Test area");
+
+        Plot plot = new Plot(
+                "P1", "Tent", false,
+                0, 2, 20.0, 30.0,
+                "", ""
+        );
+
+        area.addPlot(plot);
+
+        assertEquals(1, area.getPlotCount());
+
+        boolean removed = area.removePlot("P1");
+
+        assertTrue(removed);
+        assertEquals(0, area.getPlotCount());
+    }
+    @Test
+    void testRemovePlotReassignsBooking() {
+        CampingArea area = new CampingArea("A1", "Test area");
+
+        Plot plot1 = new Plot(
+                "P1", "Tent", false,
+                0, 2, 20.0, 30.0,
+                "", ""
+        );
+
+        Plot plot2 = new Plot(
+                "P2", "Tent", false,
+                0, 2, 20.0, 30.0,
+                "", ""
+        );
+
+        area.addPlot(plot1);
+
+        Booking booking = new Booking(
+                "B1", "G1", "A1",
+                LocalDate.of(2026, 11, 1),
+                LocalDate.of(2026, 11, 5),
+                "Tent", 2, false,
+                0, 10.0, 50.0
+        );
+
+        assertTrue(area.bookPlot(booking));
+        assertEquals("P1", booking.getAssignedPlotId());
+
+        area.addPlot(plot2);
+
+        assertTrue(area.removePlot("P1"));
+
+        assertEquals(1, area.getPlotCount());
+        assertEquals("P2", booking.getAssignedPlotId());
+        assertEquals(0, area.getPendingBookingCount());
+    }
 }
